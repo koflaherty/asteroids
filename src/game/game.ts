@@ -1,6 +1,7 @@
 import World from './engine/World.ts'
 import { Sprite } from 'pixi.js'
 import { setupBackground } from './background.ts'
+import {Asteroid} from "./game-objects/Asteroid.ts";
 const bunny = Sprite.from('https://pixijs.com/assets/bunny.png')
 export function setupGame(element: HTMLDivElement) {
   const world = new World({
@@ -29,4 +30,7 @@ export function setupGame(element: HTMLDivElement) {
 
   // Set up scene
   setupBackground(world);
+  new Asteroid({
+    world,
+  })
 }

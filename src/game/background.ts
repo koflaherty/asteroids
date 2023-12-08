@@ -13,5 +13,5 @@ export const setupBackground = (world: World) => {
 
   setInterval(() => {
     stars[Math.floor(Math.random() * stars.length)].twinkle();
-  }, 100)
+  }, 50)
 }
