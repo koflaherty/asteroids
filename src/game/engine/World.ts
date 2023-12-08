@@ -1,4 +1,4 @@
-import { Application, Sprite } from 'pixi.js'
+import { Application, Container, Sprite } from 'pixi.js'
 import { Viewport } from 'pixi-viewport'
 
 class World {
@@ -34,7 +34,7 @@ class World {
     args.mountToElement.appendChild(this.app.view);
   }
 
-  add(sprite: Sprite) {
+  add(sprite: Sprite | Container) {
     this.viewport.addChild(sprite);
   }
 

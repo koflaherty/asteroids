@@ -1,17 +1,28 @@
 import World from "../engine/World.ts";
-import {Text, TextStyle} from "pixi.js";
+import {Text, TextStyle, Container} from "pixi.js";
+import { BACKGROUND_COLOR } from '../background.ts'
 
-const startTextStyle = new TextStyle({
+const baseTextStyle = {
   fontFamily: 'moby-monospace',
   fontSize: 14,
-  fill: '#CC02FF',
+  fill: '#FFFFFF',
   lineHeight: 21,
-});
-setTimeout(() => {
-  startTextStyle.fill = "yellow";
-}, 1000)
+  stroke: BACKGROUND_COLOR,
+  strokeThickness: 6,
+}
 
-function generateAsteroidASCII(word) {
+const AsteroidTextStyles = {
+  white: new TextStyle({
+    ...baseTextStyle,
+    fill: "#FFFFFF",
+  }),
+  purple: new TextStyle({
+    ...baseTextStyle,
+    fill: "CC02FF",
+  }),
+};
+
+function generateAsteroidASCII(word: string) {
   const lines = [];
   const maxLength = Math.max(word.length + 8, 12); // Ensure the asteroid is wide enough
   const halfHeight = Math.ceil(maxLength / 4);
@@ -43,7 +54,7 @@ function generateAsteroidASCII(word) {
   // Generate the bottom half of the asteroid
   for (let i = halfHeight - 2; i >= 0; i--) {
     // Introduce defects in the bottom half as well
-    let line = lines[i];
+    let line: string = lines[i];
     if (i !== halfHeight - 2 && getRandomInt(0, 1) === 1) { // Avoid changing the line adjacent to the middle
       // Either add a character at the end or remove one
       line = getRandomInt(0, 1) === 1 ? line + getRandomAsteroidCharacter() : line.slice(0, -1);
@@ -59,7 +70,7 @@ function getRandomAsteroidCharacter() {
   return chars[Math.floor(Math.random() * chars.length)];
 }
 
-function getRandomInt(min, max) {
+function getRandomInt(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
@@ -67,17 +78,29 @@ export class Asteroid {
   constructor({world}: {
     world: World;
   }) {
-    const asteroidText = generateAsteroidASCII('Asteroid');
+    const container = new Container();
+    const word = " ASTEROID ";
+    const asciiText = generateAsteroidASCII(word);
+    const asteroidText = asciiText.replace(word, " ".repeat(word.length));
+    const nameText = asciiText.replace(/[^a-zA-Z\d\s:\u00C0-\u00FF]/g, " ");
 
 
-    const word = " FRONT-END ";
+    console.log(nameText)
 
-    const sprite =  new Text(asteroidText, startTextStyle);
+    const spriteAsteroid =  new Text(asteroidText, AsteroidTextStyles.purple);
+    const spriteName =  new Text(nameText, AsteroidTextStyles.white);
+    container.addChild(spriteAsteroid);
+    container.addChild(spriteName);
 
-    setInterval(() => {
-      sprite.text = generateAsteroidASCII(word);
-    }, 1000);
+    // setInterval(() => {
+    //   spriteAsteroid.text = generateAsteroidASCII(" Asteroid ");
+    // }, 1000);
 
-    world.add(sprite);
+    world.add(container);
+
+    world.subscribeToUpdate(() => {
+      container.position.x += 0.05;
+      container.position.y += 0.05;
+    })
   }
 }

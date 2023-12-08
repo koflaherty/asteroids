@@ -1,13 +1,17 @@
 import World from './engine/World.ts'
 import Star from './game-objects/Star.ts'
 
+export const BACKGROUND_COLOR = "#160F21";
+
 export const setupBackground = (world: World) => {
   const stars: Star[] = [];
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 800; i++) {
     stars.push(new Star({
       world,
-      x: Math.random() * world.viewport.worldWidth,
-      y: Math.random() * world.viewport.worldHeight,
+      position: {
+        x: Math.random() * world.viewport.worldWidth,
+        y: Math.random() * world.viewport.worldHeight,
+      }
     }));
   }
 

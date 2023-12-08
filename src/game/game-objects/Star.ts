@@ -1,6 +1,6 @@
-import {Sprite, Text, TextStyle} from "pixi.js";
-import World from '../engine/World.ts'
-import TWEEN from '@tweenjs/tween.js'
+import { Text, TextStyle } from 'pixi.js'
+import * as TWEEN from '@tweenjs/tween.js'
+import { GameObject, GameObjectConstructorParameters } from './GameObject.ts'
 
 const startTextStyle = new TextStyle({
   fontFamily: 'moby-monospace',
@@ -26,29 +26,25 @@ const randomishStarSprite = () => {
   }
 }
 
-export default class Star {
+
+export default class Star extends GameObject {
   baseAlpha: number;
   isTwinkling: boolean;
-  sprite: Sprite;
-  world: World;
-  constructor({ x, y, world }: {
-    x: number;
-    y: number;
-    world: World;
-    twinkle?: boolean;
-  }) {
+  // sprite: Sprite;
+  constructor({ position, world }: Omit<GameObjectConstructorParameters, "object">) {
+    const sprite = randomishStarSprite();
+    const baseAlpha = Math.random() * 0.4 + 0.2;
+    sprite.anchor.set(0.5);
+    sprite.scale.x = baseAlpha;
+    sprite.scale.y = baseAlpha;
+    sprite.alpha = baseAlpha;
+    super({
+      object: sprite,
+      world,
+      position,
+    });
     this.baseAlpha = Math.random() * 0.4 + 0.2;
     this.isTwinkling = false;
-    this.world = world;
-    this.sprite = randomishStarSprite();
-    this.sprite.anchor.set(0.5);
-    this.sprite.x = x;
-    this.sprite.y = y;
-    // this.sprite.rotation = Math.random() * Math.PI * 2;
-    this.sprite.scale.x = this.baseAlpha;
-    this.sprite.scale.y = this.baseAlpha;
-    this.sprite.alpha = this.baseAlpha;
-    world.add(this.sprite);
   }
 
   twinkle() {
@@ -62,10 +58,10 @@ export default class Star {
       group.update();
     })
 
-    const growTween = new TWEEN.Tween(this.sprite.scale, group) // Create a new tween that modifies 'coords'.
+    const growTween = new TWEEN.Tween(this.object.scale, group) // Create a new tween that modifies 'coords'.
      .to({x: 1, y: 1}, 400) // Move to (300, 200) in 1 second.
      .easing(TWEEN.Easing.Bounce.InOut) // Use an easing function to make the animation smooth.
-    const shrinkTween = new TWEEN.Tween(this.sprite.scale, group)
+    const shrinkTween = new TWEEN.Tween(this.object.scale, group)
     .to({x: this.baseAlpha, y: this.baseAlpha}, 400)
     .onComplete(() => {
       this.isTwinkling = false;
