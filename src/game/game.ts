@@ -1,5 +1,6 @@
 import World from './engine/World.ts'
 import { Sprite } from 'pixi.js'
+import { setupBackground } from './background.ts'
 const bunny = Sprite.from('https://pixijs.com/assets/bunny.png')
 export function setupGame(element: HTMLDivElement) {
   const world = new World({
@@ -10,6 +11,9 @@ export function setupGame(element: HTMLDivElement) {
       y: 3000,
     },
   });
+
+  // enable Tween
+
   // activate plugins
 
   bunny.anchor.set(0.5)
@@ -18,4 +22,10 @@ export function setupGame(element: HTMLDivElement) {
   bunny.y = 1500
   world.add(bunny);
   world.follow(bunny);
+  world.subscribeToUpdate(() => {
+    bunny.rotation += 0.1;
+  })
+
+  // Set up scene
+  setupBackground(world);
 }

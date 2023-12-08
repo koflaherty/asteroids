@@ -13,7 +13,7 @@ class World {
     },
   }) {
     this.app = new Application({
-      background: 'yellow',
+      background: args.backgroundColor,
       resizeTo: args.mountToElement,
     });
 
@@ -36,13 +36,6 @@ class World {
 
   add(sprite: Sprite) {
     this.viewport.addChild(sprite);
-    this.app.ticker.add((delta) => {
-
-      // just for fun, let's rotate mr rabbit a little
-      // delta is 1 if running at 100% performance
-      // creates frame-independent transformation
-      sprite.rotation += 0.1 * delta;
-    });
   }
 
   follow(sprite: Sprite) {
@@ -56,6 +49,11 @@ class World {
       x: this.viewport.worldWidth / 2,
       y: this.viewport.worldHeight / 2,
     }
+  }
+
+  subscribeToUpdate(callback: (delta: number) => void) {
+    this.app.ticker.add(callback);
+    return () => this.app.ticker.remove(callback);
   }
 
 }
