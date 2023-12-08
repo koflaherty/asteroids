@@ -67,11 +67,17 @@ export class Asteroid {
   constructor({world}: {
     world: World;
   }) {
+    const asteroidText = generateAsteroidASCII('Asteroid');
+
 
     const word = " FRONT-END ";
-    console.log(generateAsteroidASCII(word));
 
-    const sprite =  new Text(generateAsteroidASCII(word), startTextStyle);
+    const sprite =  new Text(asteroidText, startTextStyle);
+
+    setInterval(() => {
+      sprite.text = generateAsteroidASCII(word);
+    }, 1000);
+
     world.add(sprite);
   }
 }
