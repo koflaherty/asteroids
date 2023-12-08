@@ -2,7 +2,7 @@ import './style.css'
 import typescriptLogo from './typescript.svg'
 import viteLogo from '/vite.svg'
 import { setupCounter } from './counter.ts'
-import { setupGameView } from './gameView.ts'
+import { setupGame } from './game/game.ts'
 
 
 
@@ -28,4 +28,4 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `
 
 setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
-setupGameView(document.querySelector<HTMLDivElement>('#gameView')!)
+setupGame(document.querySelector<HTMLDivElement>('#gameView')!)
