@@ -26,6 +26,7 @@
   top: 0;
   left: 0;
   right: 0;
+  pointer-events: none;
 }
 
 a {
@@ -88,6 +89,7 @@ button {
   background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  pointer-events: all;
 }
 button:hover {
   border-color: #646cff;
