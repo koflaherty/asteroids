@@ -2,37 +2,30 @@ import { Text, TextStyle } from 'pixi.js'
 import * as TWEEN from '@tweenjs/tween.js'
 import { GameObject, GameObjectConstructorParameters } from './GameObject.ts'
 
+import { getWeightedRandomString } from '../ascii-art/getRandomWeightedCharacter.ts'
+
+const getRandomStarText = getWeightedRandomString([
+  {weight: 2, value: "*"},
+  {weight: 3, value: "^"},
+  {weight: 1, value: "o"},
+  {weight: 1, value: "X"},
+  {weight: 3, value: "+"},
+  {weight: 3, value: "."},
+]);
+
+
 const startTextStyle = new TextStyle({
   fontFamily: 'moby-monospace',
   fontSize: 12,
   fill: '#ffffff',
 });
 
-const randomishStarSprite = () => {
-  const startType = Math.floor(Math.random() * 5);
-  switch (startType) {
-    case 0:
-      return new Text('*', startTextStyle);
-    case 1:
-      return new Text('^', startTextStyle);
-    case 2:
-      return new Text('o', startTextStyle);
-    case 3:
-      return new Text('X', startTextStyle);
-    case 4:
-      return new Text('+', startTextStyle);
-    default:
-      return new Text('.', startTextStyle);
-  }
-}
-
-
 export default class Star extends GameObject {
   baseAlpha: number;
   isTwinkling: boolean;
   // sprite: Sprite;
   constructor({ position, world }: Omit<GameObjectConstructorParameters, "object">) {
-    const sprite = randomishStarSprite();
+    const sprite = new Text(getRandomStarText(), startTextStyle);
     const baseAlpha = Math.random() * 0.4 + 0.2;
     sprite.anchor.set(0.5);
     sprite.scale.x = baseAlpha;

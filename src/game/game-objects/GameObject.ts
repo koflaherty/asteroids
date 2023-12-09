@@ -1,5 +1,6 @@
 import World from '../engine/World.ts'
 import { Container, Sprite } from 'pixi.js'
+import { getWeightedRandomString } from '../ascii-art/getRandomWeightedCharacter.ts'
 
 // ConstructorParameters<typeof SomeClass>
 
@@ -28,3 +29,5 @@ export class GameObject {
     this.world.add(this.object);
   }
 }
+
+console.log("GENERATE ASTEROIDS", getWeightedRandomString([{weight: 2, value: "EEEE"},{weight: 2, value: "F",},{weight: 2, value: "E3"}])());
