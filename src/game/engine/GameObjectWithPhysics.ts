@@ -1,15 +1,25 @@
-import { GameObject, GameObjectConstructorParameters } from './GameObject.ts'
-import { Point2D, Vector2D } from './types.ts'
+import {GameObject, GameObjectConstructorParameters} from "./GameObject.ts";
+import {Vector2D} from "./types.ts";
 
-interface GameObjectWithPhysics extends GameObjectConstructorParameters {
-  position?: Point2D;
+interface GameObjectWithPhysicsParameters extends GameObjectConstructorParameters {
   velocity?: Vector2D;
   thrust?: Vector2D;
 }
 
-class GameObjectWithPhysics extends GameObject {
-  constructor(args: GameObjectConstructorParameters) {
+export class GameObjectWithPhysics extends GameObject {
+  velocity: Vector2D;
+  thrust: Vector2D;
+  constructor({velocity, thrust, ...rest}: GameObjectWithPhysicsParameters) {
+    super(rest);
 
+    this.velocity = velocity || {x: 0, y: 0};
+    this.thrust = thrust || {x: 0, y: 0};
+
+    this.world.subscribeToUpdate((delta) => {
+      this.object.x += this.velocity.x * delta;
+      this.object.y += this.velocity.y * delta;
+
+    });
   }
 
 }

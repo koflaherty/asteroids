@@ -1,7 +1,8 @@
-import { Container, Text, TextStyle } from 'pixi.js'
-import { BACKGROUND_COLOR } from '../background.ts'
-import { asteroidTextGeneration } from '../ascii-art/asteroidTextGeneration.ts'
-import { GameObject, GameObjectConstructorParameters } from '../engine/GameObject.ts'
+import {Container, Text, TextStyle} from "pixi.js";
+import {BACKGROUND_COLOR} from "../background.ts";
+import {asteroidTextGeneration} from "../ascii-art/asteroidTextGeneration.ts";
+import {GameObjectConstructorParameters} from "../engine/GameObject.ts";
+import {GameObjectWithPhysics} from "../engine/GameObjectWithPhysics.ts";
 
 const baseTextStyle = {
   fontFamily: 'moby-monospace',
@@ -23,7 +24,7 @@ const AsteroidTextStyles = {
   }),
 };
 
-export class Asteroid extends GameObject {
+export class Asteroid extends GameObjectWithPhysics {
   constructor(args: Omit<GameObjectConstructorParameters, "object">) {
     const container = new Container();
     const word = " ASTEROID ";
@@ -36,12 +37,25 @@ export class Asteroid extends GameObject {
     container.addChild(spriteAsteroid);
     container.addChild(spriteName);
     super({...args, object: container});
+    this.velocity = {x: -0.3, y: -0.25};
     this.world.subscribeToUpdate(() => {
-      container.position.x -= 0.05;
-      container.position.y += 0.05;
+      const boundsCheck = this.checkBoundaries();
+      if (!boundsCheck.outOfBounds) {
+        return;
+      }
 
-      if (this.checkBoundaries().outOfBounds) {
-        console.log("Out of bounds");
+      if (
+        boundsCheck.x < 0 && this.velocity.x < 0 ||
+        boundsCheck.x > 0 && this.velocity.x > 0
+      ) {
+        this.velocity.x = this.velocity.x * -1;
+      }
+
+      if (
+        boundsCheck.y < 0 && this.velocity.y < 0 ||
+        boundsCheck.y > 0 && this.velocity.y > 0
+      ) {
+        this.velocity.y = this.velocity.y * -1;
       }
     });
   }
