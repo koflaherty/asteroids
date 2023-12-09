@@ -56,5 +56,7 @@ class World {
     return () => this.app.ticker.remove(callback);
   }
 
+
+
 }
 export default World

@@ -1,6 +1,6 @@
 import { Text, TextStyle } from 'pixi.js'
 import * as TWEEN from '@tweenjs/tween.js'
-import { GameObject, GameObjectConstructorParameters } from './GameObject.ts'
+import { GameObject, GameObjectConstructorParameters } from '../engine/GameObject.ts'
 
 import { getWeightedRandomString } from '../ascii-art/getRandomWeightedCharacter.ts'
 
