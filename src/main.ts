@@ -16,4 +16,9 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
 `
 
 setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
-setupGame(document.querySelector<HTMLDivElement>('#gameView')!)
+
+window.onload = function() {
+  setupGame(document.querySelector<HTMLDivElement>('#gameView')!)
+};
+
+
