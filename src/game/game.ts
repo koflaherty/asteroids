@@ -32,12 +32,21 @@ export function setupGame(element: HTMLDivElement) {
   setupBackground(world);
   new Asteroid({
     world,
-    word: "A",
+    word: "Portfolio",
   })
 
   new Asteroid({
     world,
-    word: "B",
+    word: "Email",
+    position: {
+      x: 600,
+      y: 200,
+    }
+  })
+
+  new Asteroid({
+    world,
+    word: "Kevin O'Flaherty",
     position: {
       x: 300,
       y: 300,

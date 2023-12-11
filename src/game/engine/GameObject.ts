@@ -70,20 +70,26 @@ export class GameObject {
 
     const collisions1 = this.getCollisionBoxes();
     const collisions2 = collidable.object.getCollisionBoxes();
+    const collisions = [];
 
     for (let i = 0; i < collisions1.length; i++) {
       for (let j = 0; j < collisions2.length; j++) {
         if (collisions1[i].box.intersects(collisions2[j].box)) {
-          return [collisions1[i], collisions2[j]] // Return collision boxes that hit
+          collisions.push([collisions1[i], collisions2[j]]);
         }
       }
+    }
+    if (collisions.length === 0) {
+      return false;
+    } else {
+      return collisions;
     }
   }
 
   /**
    * This is a placeholder handling the effects of a collision.
    */
-  onCollision(_boxes: CollisionBox[]) {}
+  onCollision(_boxes: CollisionBox[][]) {}
 
   /**
    * Override this if you'd like to provide more detailed collision detection.

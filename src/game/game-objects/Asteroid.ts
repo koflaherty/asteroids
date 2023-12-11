@@ -85,10 +85,35 @@ export class Asteroid extends GameObjectWithPhysics {
     })
   }
 
-  onCollision(_boxes: CollisionBox[]) {
+  onCollision(_boxes: CollisionBox[][]) {
     this.velocity.x *= -1
     this.velocity.y *= -1
-    console.log(_boxes)
+
+    const {text} = this.breakTextObject(this.asteroidRockText.text);
+
+    let hitAsteroid = false;
+
+
+    _boxes.forEach((boxes) => {
+      console.log(boxes.map(box => box.info?.object.word))
+      boxes.forEach((box) => {
+
+        if (box.info?.object === this && typeof box.info?.row === "number" && typeof box.info?.column === "number") {
+          text[box.info?.row][box.info?.column] = " ";
+        }
+
+        if (box.info?.object !== this && box.info?.type === 'asteroid') {
+          hitAsteroid = true;
+        }
+      })
+    });
+
+    if (hitAsteroid) {
+      this.velocity.x *= -1
+      this.velocity.y *= -1
+    }
+
+    setTimeout(() => this.asteroidRockText.text = this.combineTextObject(text), 5);
   }
 
   getCollisionBoxes(): CollisionBox[] {
@@ -96,17 +121,22 @@ export class Asteroid extends GameObjectWithPhysics {
     const { text, width, height } = this.breakTextObject(this.asteroidRockText.text)
     const boxWidth = this.asteroidCoreText.width / width
     const boxHeight = this.asteroidCoreText.height / height
+    const padding = boxWidth / 3;
     text.forEach((line, row) => {
       line.forEach((letter, column) => {
         if (letter === ' ') return
         boxes.push({
           box: new Rectangle(
-            this.pixiObject.x + column * boxWidth,
-            this.pixiObject.y + row * boxHeight,
-            boxWidth,
-            boxHeight,
+            this.pixiObject.x + padding + column * boxWidth,
+            this.pixiObject.y + padding + row * boxHeight,
+            boxWidth - padding * 2,
+            boxHeight - padding * 2,
           ),
           info: {
+            object: this,
+            row,
+            column,
+            letterCount: row + column + (2 * row),
             word: this.word,
             letter,
           },
@@ -129,6 +159,17 @@ export class Asteroid extends GameObjectWithPhysics {
       width: maxWidth,
       height: text2d.length,
     }
+  }
+
+  combineTextObject(text: string[][]) {
+    let output = '';
+    for (let row = 0; row < text.length; row++) {
+      for (let column = 0; column < text[row].length; column++) {
+        output += text[row][column];
+      }
+      output += '\n';
+    }
+    return output;
   }
 
 }
