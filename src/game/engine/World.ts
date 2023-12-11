@@ -1,9 +1,12 @@
 import { Application, Container, Sprite } from 'pixi.js'
 import { Viewport } from 'pixi-viewport'
+import { Collidable, CollisionDetector } from './CollisionDetector.ts'
 
 class World {
-  app: Application<HTMLCanvasElement>
-  viewport: Viewport
+  app: Application<HTMLCanvasElement>;
+  viewport: Viewport;
+  collisionDetector: CollisionDetector;
+
   constructor(args: {
     mountToElement: HTMLElement;
     backgroundColor: string;
@@ -22,6 +25,7 @@ class World {
       worldHeight: 3000,
       events: this.app.renderer.events, // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
     });
+    this.collisionDetector = new CollisionDetector(this);
 
     this.viewport
       .drag()
@@ -36,6 +40,10 @@ class World {
 
   add(sprite: Sprite | Container) {
     this.viewport.addChild(sprite);
+  }
+
+  addCollidable(collidable: Collidable) {
+    this.collisionDetector.add(collidable);
   }
 
   follow(sprite: Sprite) {
@@ -55,8 +63,6 @@ class World {
     this.app.ticker.add(callback);
     return () => this.app.ticker.remove(callback);
   }
-
-
 
 }
 export default World

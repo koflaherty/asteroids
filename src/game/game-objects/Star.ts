@@ -24,7 +24,7 @@ export default class Star extends GameObject {
   baseAlpha: number;
   isTwinkling: boolean;
   // sprite: Sprite;
-  constructor({ position, world }: Omit<GameObjectConstructorParameters, "object">) {
+  constructor({ position, world }: Omit<GameObjectConstructorParameters, "pixiObject">) {
     const sprite = new Text(getRandomStarText(), startTextStyle);
     const baseAlpha = Math.random() * 0.4 + 0.2;
     sprite.anchor.set(0.5);
@@ -32,7 +32,7 @@ export default class Star extends GameObject {
     sprite.scale.y = baseAlpha;
     sprite.alpha = baseAlpha;
     super({
-      object: sprite,
+      pixiObject: sprite,
       world,
       position,
     });
@@ -51,10 +51,10 @@ export default class Star extends GameObject {
       group.update();
     })
 
-    const growTween = new TWEEN.Tween(this.object.scale, group) // Create a new tween that modifies 'coords'.
+    const growTween = new TWEEN.Tween(this.pixiObject.scale, group) // Create a new tween that modifies 'coords'.
      .to({x: 1, y: 1}, 400) // Move to (300, 200) in 1 second.
      .easing(TWEEN.Easing.Bounce.InOut) // Use an easing function to make the animation smooth.
-    const shrinkTween = new TWEEN.Tween(this.object.scale, group)
+    const shrinkTween = new TWEEN.Tween(this.pixiObject.scale, group)
     .to({x: this.baseAlpha, y: this.baseAlpha}, 400)
     .onComplete(() => {
       this.isTwinkling = false;
