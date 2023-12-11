@@ -2,6 +2,7 @@ import World from './engine/World.ts'
 import { Sprite } from 'pixi.js'
 import { setupBackground } from './background.ts'
 import {Asteroid} from "./game-objects/Asteroid.ts";
+import { Ship } from './game-objects/Ship.ts'
 const bunny = Sprite.from('https://pixijs.com/assets/bunny.png')
 export function setupGame(element: HTMLDivElement) {
   const world = new World({
@@ -17,12 +18,6 @@ export function setupGame(element: HTMLDivElement) {
 
   // activate plugins
 
-
-  bunny.anchor.set(0.5)
-  // move the sprite to the center of the screen
-  bunny.x = 1500
-  bunny.y = 1500
-  world.add(bunny);
   // world.follow(bunny);
   world.subscribeToUpdate(() => {
     bunny.rotation += 0.1;
@@ -51,5 +46,18 @@ export function setupGame(element: HTMLDivElement) {
       x: 300,
       y: 300,
     },
+  })
+
+  new Ship({
+    world,
+    position: {
+      x: 200,
+      y: 200,
+    },
+    velocity: {
+      x: 1,
+      y: 1,
+    },
+    decay: 0.02,
   })
 }
