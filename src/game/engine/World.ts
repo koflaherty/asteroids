@@ -6,6 +6,7 @@ class World {
   app: Application<HTMLCanvasElement>;
   viewport: Viewport;
   collisionDetector: CollisionDetector;
+  mountToElement: HTMLElement;
 
   constructor(args: {
     mountToElement: HTMLElement;
@@ -19,23 +20,23 @@ class World {
       background: args.backgroundColor,
       resizeTo: args.mountToElement,
     });
-
     this.viewport = new Viewport({
       worldWidth: 3000,
       worldHeight: 3000,
       events: this.app.renderer.events, // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
     });
     this.collisionDetector = new CollisionDetector(this);
+    this.mountToElement = args.mountToElement;
 
     this.viewport
-      .drag()
-      .decelerate()
-      .clamp({
-        direction: "all",
-      });
+      // .drag()
+      // .decelerate()
+      // .clamp({
+      //   direction: "all",
+      // });
 
     this.app.stage.addChild(this.viewport);
-    args.mountToElement.appendChild(this.app.view);
+    this.mountToElement.appendChild(this.app.view);
   }
 
   add(sprite: Sprite | Container) {
@@ -47,7 +48,7 @@ class World {
   }
 
   follow(sprite: Container) {
-    const radius = window.innerWidth > window.innerHeight ? window.innerHeight / 8 : window.innerWidth / 8;
+    const radius = window.innerWidth > window.innerHeight ? window.innerHeight / 4 : window.innerWidth / 4;
     this.viewport.follow(sprite, {
       radius,
     });

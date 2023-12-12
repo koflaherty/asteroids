@@ -43,7 +43,7 @@ export class GameObjectWithPhysics extends GameObject {
       this.applyThrust(delta)
 
       if (this.rotationTarget) {
-        const rotationEase = 0.08;
+        const rotationEase = 0.18;
         let dx = this.rotationTarget.x - this.pixiObject.x;
         let dy = this.rotationTarget.y - this.pixiObject.y;
         let targetAngle = Math.atan2(dy, dx);
