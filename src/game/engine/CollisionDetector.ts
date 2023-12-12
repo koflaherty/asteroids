@@ -1,5 +1,7 @@
 import { GameObject } from './GameObject.ts'
 import World from './World.ts'
+import { Vector2D } from './types.ts'
+import { Container, Rectangle } from 'pixi.js'
 
 export type Collidable = {
   object: GameObject;
@@ -27,5 +29,22 @@ export class CollisionDetector {
 
   add(collidable: Collidable) {
     this.collidables.push(collidable)
+  }
+
+  checkClickedOn(position: Vector2D) {
+    const hitSize = 10;
+    const clickBounds = new Rectangle(position.x - hitSize / 2, position.y - hitSize / 2, hitSize, hitSize);
+    const clickObject = this.collidables.find((collidable) => {
+      const objectRect = new Rectangle(collidable.object.pixiObject.position.x, collidable.object.pixiObject.position.y, collidable.object.pixiObject.width, collidable.object.pixiObject.height);
+      if (
+        clickBounds.intersects(objectRect) &&
+        collidable.object.getCollisionBoxes().find((box) => {
+          return box.box.intersects(clickBounds);
+        })
+      ) {
+        return true;
+      }
+    })
+    return clickObject;
   }
 }

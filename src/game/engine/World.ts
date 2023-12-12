@@ -31,9 +31,9 @@ class World {
     this.viewport
       // .drag()
       // .decelerate()
-      // .clamp({
-      //   direction: "all",
-      // });
+      .clamp({
+        direction: "all",
+      });
 
     this.app.stage.addChild(this.viewport);
     this.mountToElement.appendChild(this.app.view);

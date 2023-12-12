@@ -59,8 +59,8 @@ export class GameObject {
   }
 
   addCollidable(collidable: Collidable) {
-    this.collidable = collidable;
-    this.world.addCollidable(this.collidable);
+    this.collidable = collidable
+    this.world.addCollidable(this.collidable)
   }
 
   checkCollision(collidable: Collidable) {
@@ -70,38 +70,46 @@ export class GameObject {
 
     // Check if bounding boxes intersect
     if (!collidable.object.pixiObject.getBounds().intersects(this.collidable.object.pixiObject.getBounds())) {
-      return false;
+      return false
     }
 
-    const collisions1 = this.getCollisionBoxes();
-    const collisions2 = collidable.object.getCollisionBoxes();
-    const collisions = [];
+    const collisions1 = this.getCollisionBoxes()
+    const collisions2 = collidable.object.getCollisionBoxes()
+    const collisions = []
 
     for (let i = 0; i < collisions1.length; i++) {
       for (let j = 0; j < collisions2.length; j++) {
         if (collisions1[i].box.intersects(collisions2[j].box)) {
-          collisions.push([collisions1[i], collisions2[j]]);
+          collisions.push([collisions1[i], collisions2[j]])
         }
       }
     }
     if (collisions.length === 0) {
-      return false;
+      return false
     } else {
-      return collisions;
+      return collisions
     }
   }
 
   /**
    * This is a placeholder handling the effects of a collision.
    */
-  onCollision(_boxes: CollisionBox[][]) {}
+  onCollision(_boxes: CollisionBox[][]) {
+  }
 
   /**
    * Override this if you'd like to provide more detailed collision detection.
    */
   getCollisionBoxes(): CollisionBox[] {
     return [
-      {box: this.pixiObject.getBounds()},
-    ];
+      {
+        box: new Rectangle(
+          this.pixiObject.x,
+          this.pixiObject.y,
+          this.pixiObject.width,
+          this.pixiObject.height,
+        ),
+      },
+    ]
   }
 }

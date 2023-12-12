@@ -48,16 +48,18 @@ export class Ship extends GameObjectWithPhysics {
 
     // Check for clicks
     this.world.mountToElement.addEventListener("click", (e) => {
-      console.log({
-        x: e.clientX,
-        y: e.clientY,
-        vX: this.world.viewport.x,
-        vY: this.world.viewport.y,
-      })
       const clickPosition = {
         x: e.clientX - this.world.viewport.x,
         y: e.clientY - this.world.viewport.y,
       }
+      const clickedOn = this.world.collisionDetector.checkClickedOn({
+        x: e.clientX - this.world.viewport.x,
+        y: e.clientY - this.world.viewport.y,
+      })
+
+      console.log(clickedOn);
+
+      // console.log("check", this.world.collisionDetector.checkClickedOn(clickPosition));
       this.moveTo(clickPosition)
     })
   }

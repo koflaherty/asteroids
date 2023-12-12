@@ -48,8 +48,8 @@ export function setupGame(element: HTMLDivElement) {
     world,
     maxVelocity: 3,
     position: {
-      x: 1500,
-      y: 1500,
+      x: 0,
+      y: 0,
     },
     decay: 0.045,
   });
