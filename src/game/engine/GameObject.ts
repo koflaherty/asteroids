@@ -68,6 +68,11 @@ export class GameObject {
       return false
     }
 
+    // Check if bounding boxes intersect
+    if (!collidable.object.pixiObject.getBounds().intersects(this.collidable.object.pixiObject.getBounds())) {
+      return false;
+    }
+
     const collisions1 = this.getCollisionBoxes();
     const collisions2 = collidable.object.getCollisionBoxes();
     const collisions = [];

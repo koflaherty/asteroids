@@ -1,9 +1,9 @@
 import World from './engine/World.ts'
-import { Sprite } from 'pixi.js'
 import { setupBackground } from './background.ts'
-import {Asteroid} from "./game-objects/Asteroid.ts";
+import { Asteroid } from './game-objects/Asteroid.ts'
 import { Ship } from './game-objects/Ship.ts'
-const bunny = Sprite.from('https://pixijs.com/assets/bunny.png')
+
+
 export function setupGame(element: HTMLDivElement) {
   const world = new World({
     mountToElement: element,
@@ -19,9 +19,7 @@ export function setupGame(element: HTMLDivElement) {
   // activate plugins
 
   // world.follow(bunny);
-  world.subscribeToUpdate(() => {
-    bunny.rotation += 0.1;
-  })
+
 
   // Set up scene
   setupBackground(world);
@@ -48,8 +46,9 @@ export function setupGame(element: HTMLDivElement) {
     },
   })
 
-  new Ship({
+  const ship = new Ship({
     world,
+    maxVelocity: 3,
     position: {
       x: 200,
       y: 200,
@@ -59,5 +58,15 @@ export function setupGame(element: HTMLDivElement) {
       y: 1,
     },
     decay: 0.02,
-  })
+  });
+
+  ship.thrust = {
+    x: 0.1,
+    y: 0.1,
+  }
+
+  ship.rotationTarget = {
+    x: 1500,
+    y: 1500,
+  }
 }
