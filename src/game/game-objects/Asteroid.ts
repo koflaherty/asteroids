@@ -119,8 +119,8 @@ export class Asteroid extends GameObjectWithPhysics {
   getCollisionBoxes(): CollisionBox[] {
     const boxes: CollisionBox[] = []
     const { text, width, height } = this.breakTextObject(this.asteroidRockText.text)
-    const boxWidth = this.asteroidCoreText.width / width
-    const boxHeight = this.asteroidCoreText.height / height
+    const boxWidth = this.asteroidRockText.width / width
+    const boxHeight = this.asteroidRockText.height / height
     const padding = boxWidth / 3;
     text.forEach((line, row) => {
       line.forEach((letter, column) => {

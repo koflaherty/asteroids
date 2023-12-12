@@ -2,6 +2,7 @@ import { Sprite } from 'pixi.js'
 import { GameObjectWithPhysics, GameObjectWithPhysicsParameters } from '../engine/GameObjectWithPhysics.ts'
 import { Vector2D } from '../engine/types.ts'
 import { distanceBetweenVectors, magnitudeOfVector2D } from '../engine/helpers.ts'
+import { CollisionBox } from '../engine/GameObject.ts'
 
 export class Ship extends GameObjectWithPhysics {
   targetPosition: Vector2D | null;
@@ -13,17 +14,23 @@ export class Ship extends GameObjectWithPhysics {
     ...args,
       pixiObject: ship,
     });
+    this.addCollidable({
+      object: this,
+      type: 'ship',
+      collidesWith: ['asteroid'],
+    })
     this.targetPosition = null;
 
     this.world.subscribeToUpdate(() => {
-      if (this.targetPosition && distanceBetweenVectors(ship.position, this.targetPosition) < 75) {
+      const shipRect = this.rect();
+      if (this.targetPosition && distanceBetweenVectors({x: shipRect.x, y: shipRect.y}, this.targetPosition) < 50) {
         this.targetPosition = null;
       }
 
       if (this.targetPosition) {
         // Direction to the target
-        let dx = this.targetPosition.x - ship.position.x;
-        let dy = this.targetPosition.y - ship.position.y;
+        let dx = this.targetPosition.x - shipRect.x;
+        let dy = this.targetPosition.y - shipRect.y;
 
         // Distance to the target
         let distanceToTarget = Math.sqrt(dx*dx + dy*dy);
@@ -66,5 +73,11 @@ export class Ship extends GameObjectWithPhysics {
 
   moveTo(position: Vector2D) {
     this.targetPosition = position;
+  }
+
+  onCollision(_boxes: CollisionBox[][]) {
+    this.velocity.x *= -1
+    this.velocity.y *= -1
+    this.targetPosition = null;
   }
 }

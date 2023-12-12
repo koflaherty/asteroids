@@ -101,15 +101,23 @@ export class GameObject {
    * Override this if you'd like to provide more detailed collision detection.
    */
   getCollisionBoxes(): CollisionBox[] {
-    return [
-      {
-        box: new Rectangle(
-          this.pixiObject.x,
-          this.pixiObject.y,
-          this.pixiObject.width,
-          this.pixiObject.height,
-        ),
-      },
-    ]
+    return [{ box: this.rect() }]
+  }
+
+  rect(): Rectangle {
+    let offset = { x: 0, y: 0 }
+    if ('anchor' in this.pixiObject) {
+      offset = {
+        x: this.pixiObject.anchor.x * this.pixiObject.width,
+        y: this.pixiObject.anchor.y * this.pixiObject.height,
+      }
+    }
+
+    return new Rectangle(
+      this.pixiObject.x - offset.x,
+      this.pixiObject.y - offset.y,
+      this.pixiObject.width,
+      this.pixiObject.height,
+    )
   }
 }
