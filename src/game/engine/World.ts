@@ -46,9 +46,10 @@ class World {
     this.collisionDetector.add(collidable);
   }
 
-  follow(sprite: Sprite) {
+  follow(sprite: Container) {
+    const radius = window.innerWidth > window.innerHeight ? window.innerHeight / 8 : window.innerWidth / 8;
     this.viewport.follow(sprite, {
-      speed: 0,
+      radius,
     });
   }
 

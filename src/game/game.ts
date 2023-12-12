@@ -18,8 +18,6 @@ export function setupGame(element: HTMLDivElement) {
 
   // activate plugins
 
-  // world.follow(bunny);
-
 
   // Set up scene
   setupBackground(world);
@@ -59,6 +57,7 @@ export function setupGame(element: HTMLDivElement) {
     },
     decay: 0.02,
   });
+  world.follow(ship.pixiObject);
 
   ship.thrust = 0.1
 
