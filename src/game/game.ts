@@ -60,10 +60,9 @@ export function setupGame(element: HTMLDivElement) {
     decay: 0.02,
   });
 
-  ship.thrust = {
-    x: 0.1,
-    y: 0.1,
-  }
+  ship.thrust = 0.1
+
+  ship.pixiObject.rotation = Math.PI / -2
 
   ship.rotationTarget = {
     x: 1500,
