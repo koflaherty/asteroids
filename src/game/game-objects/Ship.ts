@@ -23,7 +23,7 @@ export class Ship extends GameObjectWithPhysics {
 
     this.world.subscribeToUpdate(() => {
       const shipRect = this.rect();
-      if (this.targetPosition && distanceBetweenVectors({x: shipRect.x, y: shipRect.y}, this.targetPosition) < 50) {
+      if (this.targetPosition && distanceBetweenVectors({x: shipRect.x, y: shipRect.y}, this.targetPosition) < 66) {
         this.targetPosition = null;
       }
 

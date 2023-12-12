@@ -48,9 +48,9 @@ class World {
   }
 
   follow(sprite: Container) {
-    const radius = window.innerWidth > window.innerHeight ? window.innerHeight / 4 : window.innerWidth / 4;
+    // const radius = window.innerWidth > window.innerHeight ? window.innerHeight / 4 : window.innerWidth / 4;
     this.viewport.follow(sprite, {
-      radius,
+      // radius,
     });
   }
 

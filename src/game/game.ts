@@ -46,12 +46,12 @@ export function setupGame(element: HTMLDivElement) {
 
   const ship = new Ship({
     world,
-    maxVelocity: 3,
+    maxVelocity: 2.5,
     position: {
       x: 800,
       y: 900,
     },
-    decay: 0.06,
+    decay: 0.05,
   });
   world.follow(ship.pixiObject);
   ship.pixiObject.rotation = Math.PI / -2

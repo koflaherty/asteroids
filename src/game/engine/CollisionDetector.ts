@@ -1,7 +1,7 @@
 import { GameObject } from './GameObject.ts'
 import World from './World.ts'
 import { Vector2D } from './types.ts'
-import { Container, Rectangle } from 'pixi.js'
+import { Rectangle } from 'pixi.js'
 
 export type Collidable = {
   object: GameObject;
