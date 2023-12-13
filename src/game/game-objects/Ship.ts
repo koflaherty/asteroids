@@ -1,4 +1,4 @@
-import { Sprite } from 'pixi.js'
+import { Sprite, Texture } from 'pixi.js'
 import { GameObjectWithPhysics, GameObjectWithPhysicsParameters } from '../engine/GameObjectWithPhysics.ts'
 import { Vector2D } from '../engine/types.ts'
 import { distanceBetweenVectors, magnitudeOfVector2D } from '../engine/helpers.ts'
@@ -41,7 +41,7 @@ export class Ship extends GameObjectWithPhysics {
       }
 
       if (this.attacking) {
-        this.rotationTarget = { x: this.attacking.pixiObject.x, y: this.attacking.pixiObject.y }
+        this.rotationTarget = { x: this.attacking.pixiObject.x + this.attacking.pixiObject.width / 2, y: this.attacking.pixiObject.y + this.attacking.pixiObject.height / 2 }
         this.thrust = 0
       } else if (this.targetPosition) {
         // Direction to the target

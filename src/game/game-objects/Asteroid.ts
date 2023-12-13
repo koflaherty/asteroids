@@ -156,7 +156,9 @@ export class Asteroid extends GameObjectWithPhysics {
       for (let column = 0; column < text[row].length; column++) {
         output += text[row][column];
       }
-      output += '\n';
+      if (row!== text.length - 1) {
+        output += '\n';
+      }
     }
     return output;
   }
