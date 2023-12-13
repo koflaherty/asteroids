@@ -14,17 +14,6 @@ const baseTextStyle = {
   strokeThickness: 6,
 }
 
-const AsteroidTextStyles = {
-  white: new TextStyle({
-    ...baseTextStyle,
-    fill: '#FFFFFF',
-  }),
-  purple: new TextStyle({
-    ...baseTextStyle,
-    fill: 'CC02FF',
-  }),
-}
-
 const generateAsteroidText = (word: string) => {
   const asciiText = asteroidTextGeneration(word)
   const asteroidText = asciiText.replace(word, ' '.repeat(word.length))
@@ -44,8 +33,20 @@ export class Asteroid extends GameObjectWithPhysics {
   asteroidRockText: Text
   asteroidCoreText: Text
   word: string
+  exploding: boolean
 
   constructor(args: AsteroidConstructorParameters) {
+    const AsteroidTextStyles = {
+      white: new TextStyle({
+        ...baseTextStyle,
+        fill: '#FFFFFF',
+      }),
+      purple: new TextStyle({
+        ...baseTextStyle,
+        fill: 'CC02FF',
+      }),
+    }
+
     const container = new Container()
     const word = args.word
     const { nameText, asteroidText } = generateAsteroidText(word)
@@ -61,10 +62,41 @@ export class Asteroid extends GameObjectWithPhysics {
     this.addCollidable({
       object: this,
       type: 'asteroid',
-      collidesWith: ['asteroid', "laser", "ship"],
+      collidesWith: ['asteroid', 'laser', 'ship'],
     })
+    this.exploding = false
 
     this.world.subscribeToUpdate(() => {
+      if (this.exploding) {
+        // Delete a random text
+        this.asteroidCoreText.style.fill = 'orange'
+        this.asteroidRockText.style.fill = 'red'
+
+
+        const breakPerFrame = 6
+        let breakThisFrame = 0
+
+        while (true) {
+          if (this.asteroidRockText.text.search(/\S/) === -1) {
+            console.log('EXPLODED')
+            this.asteroidCoreText.text = ''
+            break
+          }
+          if (breakThisFrame >= breakPerFrame) {
+            break
+          }
+          const index = Math.floor(Math.random() * this.asteroidRockText.text.length)
+          if (this.asteroidRockText.text[index] !== '\n' && this.asteroidRockText.text[index] !== ' ') {
+            this.asteroidRockText.text = this.asteroidRockText.text.substring(0, index) + ' ' + this.asteroidRockText.text.substring(index + 1)
+            breakThisFrame++
+          }
+
+        }
+
+
+      }
+
+
       const boundsCheck = this.checkBoundaries()
       if (!boundsCheck.outOfBounds) {
         return
@@ -87,52 +119,66 @@ export class Asteroid extends GameObjectWithPhysics {
   }
 
   onCollision(_collidable: Collidable, _boxes: CollisionBox[][]) {
-    const {text} = this.breakTextObject(this.asteroidRockText.text);
+    const { text } = this.breakTextObject(this.asteroidRockText.text)
     _boxes.forEach((boxes) => {
-      console.log(boxes.map(box => box.info?.object.word))
       boxes.forEach((box) => {
-        if (box.info?.object === this && typeof box.info?.row === "number" && typeof box.info?.column === "number") {
-          text[box.info?.row][box.info?.column] = " ";
+        if (box.info?.object !== this) {
+          return
+        }
+
+        if (box.info?.textObj === this.asteroidRockText && typeof box.info?.row === 'number' && typeof box.info?.column === 'number') {
+          text[box.info?.row][box.info?.column] = ' '
+        } else if (box.info?.textObj === this.asteroidCoreText) {
+          this.exploding = true
+          console.log('EX')
         }
       })
-    });
+    })
 
-    if (_collidable.type !== "laser") {
+    if (_collidable.type !== 'laser') {
       this.velocity.x *= -1
       this.velocity.y *= -1
     }
 
-    setTimeout(() => this.asteroidRockText.text = this.combineTextObject(text), 5);
+    setTimeout(() => this.asteroidRockText.text = this.combineTextObject(text), 5)
   }
 
   getCollisionBoxes(): CollisionBox[] {
-    const boxes: CollisionBox[] = []
-    const { text, width, height } = this.breakTextObject(this.asteroidRockText.text)
-    const boxWidth = this.asteroidRockText.width / width
-    const boxHeight = this.asteroidRockText.height / height
-    const padding = boxWidth / 3;
-    text.forEach((line, row) => {
-      line.forEach((letter, column) => {
-        if (letter === ' ') return
-        boxes.push({
-          box: new Rectangle(
-            this.pixiObject.x + padding + column * boxWidth,
-            this.pixiObject.y + padding + row * boxHeight,
-            boxWidth - padding * 2,
-            boxHeight - padding * 2,
-          ),
-          info: {
-            object: this,
-            row,
-            column,
-            letterCount: row + column + (2 * row),
-            word: this.word,
-            letter,
-          },
+    const breakIntoBoxes = (spriteText: Text) => {
+      const boxes: CollisionBox[] = []
+      const { text, width, height } = this.breakTextObject(spriteText.text)
+      const boxWidth = this.asteroidRockText.width / width
+      const boxHeight = this.asteroidRockText.height / height
+      const padding = boxWidth / 3
+      text.forEach((line, row) => {
+        line.forEach((letter, column) => {
+          if (letter === ' ') return
+          boxes.push({
+            box: new Rectangle(
+              this.pixiObject.x + padding + column * boxWidth,
+              this.pixiObject.y + padding + row * boxHeight,
+              boxWidth - padding * 2,
+              boxHeight - padding * 2,
+            ),
+            info: {
+              object: this,
+              row,
+              column,
+              letterCount: row + column + (2 * row),
+              word: this.word,
+              letter,
+              textObj: spriteText,
+            },
+          })
         })
       })
-    })
-    return boxes
+      return boxes
+    }
+
+    return [
+      ...breakIntoBoxes(this.asteroidRockText),
+      ...breakIntoBoxes(this.asteroidCoreText),
+    ]
   }
 
   breakTextObject(text: string) {
@@ -151,16 +197,16 @@ export class Asteroid extends GameObjectWithPhysics {
   }
 
   combineTextObject(text: string[][]) {
-    let output = '';
+    let output = ''
     for (let row = 0; row < text.length; row++) {
       for (let column = 0; column < text[row].length; column++) {
-        output += text[row][column];
+        output += text[row][column]
       }
-      if (row!== text.length - 1) {
-        output += '\n';
+      if (row !== text.length - 1) {
+        output += '\n'
       }
     }
-    return output;
+    return output
   }
 
 }

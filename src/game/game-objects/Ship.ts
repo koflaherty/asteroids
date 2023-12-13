@@ -1,4 +1,4 @@
-import { Sprite, Texture } from 'pixi.js'
+import { Sprite } from 'pixi.js'
 import { GameObjectWithPhysics, GameObjectWithPhysicsParameters } from '../engine/GameObjectWithPhysics.ts'
 import { Vector2D } from '../engine/types.ts'
 import { distanceBetweenVectors, magnitudeOfVector2D } from '../engine/helpers.ts'
@@ -104,6 +104,10 @@ export class Ship extends GameObjectWithPhysics {
   }
 
   fire() {
+    // @ts-ignore
+    if (this.attacking?.exploding) {
+      this.attacking = null
+    }
     if (!this.attacking) {
       this.firing = false
       return
