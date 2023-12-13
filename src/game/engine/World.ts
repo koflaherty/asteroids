@@ -43,6 +43,11 @@ class World {
     this.viewport.addChild(sprite);
   }
 
+  remove (sprite: Sprite | Container) {
+    this.viewport.removeChild(sprite);
+    this.collisionDetector.remove(sprite);
+  }
+
   addCollidable(collidable: Collidable) {
     this.collisionDetector.add(collidable);
   }

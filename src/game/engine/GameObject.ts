@@ -94,7 +94,7 @@ export class GameObject {
   /**
    * This is a placeholder handling the effects of a collision.
    */
-  onCollision(_boxes: CollisionBox[][]) {
+  onCollision(_collidable: Collidable, _boxes: CollisionBox[][]) {
   }
 
   /**

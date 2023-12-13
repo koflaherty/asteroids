@@ -3,6 +3,7 @@ import { BACKGROUND_COLOR } from '../background.ts'
 import { asteroidTextGeneration } from '../ascii-art/asteroidTextGeneration.ts'
 import { CollisionBox, GameObjectConstructorParameters } from '../engine/GameObject.ts'
 import { GameObjectWithPhysics } from '../engine/GameObjectWithPhysics.ts'
+import { Collidable } from '../engine/CollisionDetector.ts'
 
 const baseTextStyle = {
   fontFamily: 'moby-monospace',
@@ -60,7 +61,7 @@ export class Asteroid extends GameObjectWithPhysics {
     this.addCollidable({
       object: this,
       type: 'asteroid',
-      collidesWith: ['asteroid'],
+      collidesWith: ['asteroid', "laser", "ship"],
     })
 
     this.world.subscribeToUpdate(() => {
@@ -85,30 +86,18 @@ export class Asteroid extends GameObjectWithPhysics {
     })
   }
 
-  onCollision(_boxes: CollisionBox[][]) {
-    this.velocity.x *= -1
-    this.velocity.y *= -1
-
+  onCollision(_collidable: Collidable, _boxes: CollisionBox[][]) {
     const {text} = this.breakTextObject(this.asteroidRockText.text);
-
-    let hitAsteroid = false;
-
-
     _boxes.forEach((boxes) => {
       console.log(boxes.map(box => box.info?.object.word))
       boxes.forEach((box) => {
-
         if (box.info?.object === this && typeof box.info?.row === "number" && typeof box.info?.column === "number") {
           text[box.info?.row][box.info?.column] = " ";
-        }
-
-        if (box.info?.object !== this && box.info?.type === 'asteroid') {
-          hitAsteroid = true;
         }
       })
     });
 
-    if (hitAsteroid) {
+    if (_collidable.type !== "laser") {
       this.velocity.x *= -1
       this.velocity.y *= -1
     }

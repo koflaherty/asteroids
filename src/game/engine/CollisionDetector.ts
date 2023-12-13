@@ -1,7 +1,7 @@
 import { GameObject } from './GameObject.ts'
 import World from './World.ts'
 import { Vector2D } from './types.ts'
-import { Rectangle } from 'pixi.js'
+import { Container, Rectangle, Sprite } from 'pixi.js'
 
 export type Collidable = {
   object: GameObject;
@@ -18,9 +18,12 @@ export class CollisionDetector {
     world.subscribeToUpdate(() => {
       this.collidables.forEach((collidableA) => {
         this.collidables.forEach((collidableB) => {
+          if (!collidableA.collidesWith.find(collidesWith => collidesWith === collidableB.type)) {
+            return;
+          }
           const collisions = collidableA.object.checkCollision(collidableB);
           if (collisions) {
-            collidableA.object.onCollision(collisions)
+            collidableA.object.onCollision(collidableB, collisions)
           }
         })
       })
@@ -29,6 +32,12 @@ export class CollisionDetector {
 
   add(collidable: Collidable) {
     this.collidables.push(collidable)
+  }
+
+  remove(sprite: Sprite | Container) {
+    this.collidables = this.collidables.filter(function(collidable) {
+      return collidable.object.pixiObject !== sprite;
+    });
   }
 
   checkClickedOn(position: Vector2D) {
