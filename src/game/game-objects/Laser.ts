@@ -1,10 +1,11 @@
-import { Sprite } from 'pixi.js'
-import { GameObjectWithPhysics } from '../engine/GameObjectWithPhysics.ts'
-import { Ship } from './Ship.ts'
-import { createVector } from '../engine/helpers.ts'
-import { CollisionBox } from '../engine/GameObject.ts'
-import World from '../engine/World.ts'
-import { Collidable } from '../engine/CollisionDetector.ts'
+import {Sprite} from "pixi.js";
+import {GameObjectWithPhysics} from "../engine/GameObjectWithPhysics.ts";
+import {Ship} from "./Ship.ts";
+import {createVector} from "../engine/helpers.ts";
+import {CollisionBox} from "../engine/GameObject.ts";
+import World from "../engine/World.ts";
+import {Collidable} from "../engine/CollisionDetector.ts";
+import {getRandom} from "../../helpers/helpers.ts";
 
 export class Laser extends GameObjectWithPhysics {
   unsubscribeToTick: () => void
@@ -14,8 +15,11 @@ export class Laser extends GameObjectWithPhysics {
   constructor({ship}: {
     ship: Ship,
   }) {
-    const laserSprite = Sprite.from('/assets/ship.png')
-    laserSprite.rotation = ship.pixiObject.rotation;
+    const laserSprite = Sprite.from('/assets/laser.png')
+    laserSprite.rotation = ship.pixiObject.rotation + getRandom({
+      min: Math.PI / -36,
+      max: Math.PI / 36,
+    });
     laserSprite.anchor.set(0.5)
 
     super({

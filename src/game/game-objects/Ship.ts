@@ -8,7 +8,7 @@ import { Collidable } from '../engine/CollisionDetector.ts'
 
 const FIREING_DELAY = {
   initial: 300,
-  betweenAttacks: 300,
+  betweenAttacks: 120,
 }
 
 export class Ship extends GameObjectWithPhysics {
@@ -41,6 +41,7 @@ export class Ship extends GameObjectWithPhysics {
       }
 
       if (this.attacking) {
+        this.targetPosition = null;
         this.rotationTarget = { x: this.attacking.pixiObject.x + this.attacking.pixiObject.width / 2, y: this.attacking.pixiObject.y + this.attacking.pixiObject.height / 2 }
         this.thrust = 0
       } else if (this.targetPosition) {
