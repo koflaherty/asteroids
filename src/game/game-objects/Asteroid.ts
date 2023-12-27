@@ -27,6 +27,7 @@ const generateAsteroidText = (word: string) => {
 
 interface AsteroidConstructorParameters extends Omit<GameObjectConstructorParameters, 'pixiObject'> {
   word: string;
+  onDestroyed?: (asteroid: Asteroid) => void;
 }
 
 export class Asteroid extends GameObjectWithPhysics {
@@ -34,6 +35,7 @@ export class Asteroid extends GameObjectWithPhysics {
   asteroidCoreText: Text
   word: string
   exploding: boolean
+  private onDestroyed: ((asteroid: Asteroid) => void) | undefined;
 
   constructor(args: AsteroidConstructorParameters) {
     const AsteroidTextStyles = {
@@ -65,6 +67,7 @@ export class Asteroid extends GameObjectWithPhysics {
       collidesWith: ['asteroid', 'laser', 'ship'],
     })
     this.exploding = false
+    this.onDestroyed = args.onDestroyed;
 
     this.world.subscribeToUpdate(() => {
       if (this.exploding) {
@@ -78,7 +81,6 @@ export class Asteroid extends GameObjectWithPhysics {
 
         while (true) {
           if (this.asteroidRockText.text.search(/\S/) === -1) {
-            console.log('EXPLODED')
             this.asteroidCoreText.text = ''
             break
           }
@@ -90,12 +92,8 @@ export class Asteroid extends GameObjectWithPhysics {
             this.asteroidRockText.text = this.asteroidRockText.text.substring(0, index) + ' ' + this.asteroidRockText.text.substring(index + 1)
             breakThisFrame++
           }
-
         }
-
-
       }
-
 
       const boundsCheck = this.checkBoundaries()
       if (!boundsCheck.outOfBounds) {
@@ -128,9 +126,9 @@ export class Asteroid extends GameObjectWithPhysics {
 
         if (box.info?.textObj === this.asteroidRockText && typeof box.info?.row === 'number' && typeof box.info?.column === 'number') {
           text[box.info?.row][box.info?.column] = ' '
-        } else if (box.info?.textObj === this.asteroidCoreText) {
+        } else if (box.info?.textObj === this.asteroidCoreText && !this.exploding) {
           this.exploding = true
-          console.log('EX')
+          this.onDestroyed && this.onDestroyed(this);
         }
       })
     })
@@ -144,6 +142,9 @@ export class Asteroid extends GameObjectWithPhysics {
   }
 
   getCollisionBoxes(): CollisionBox[] {
+    if (this.exploding) {
+      return [];
+    }
     const breakIntoBoxes = (spriteText: Text) => {
       const boxes: CollisionBox[] = []
       const { text, width, height } = this.breakTextObject(spriteText.text)

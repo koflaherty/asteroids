@@ -42,6 +42,16 @@ export function setupGame(element: HTMLDivElement) {
       x: 300,
       y: 300,
     },
+    onDestroyed: (asteroid: Asteroid) => {
+      new Asteroid({
+        world,
+        word: " Email2 ",
+        position: {
+          x: asteroid.pixiObject.x,
+          y: asteroid.pixiObject.y,
+        }
+      })
+    }
   })
 
   const ship = new Ship({
