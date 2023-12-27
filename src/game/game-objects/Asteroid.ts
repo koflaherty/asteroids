@@ -5,6 +5,16 @@ import {CollisionBox, GameObjectConstructorParameters} from "../engine/GameObjec
 import {GameObjectWithPhysics} from "../engine/GameObjectWithPhysics.ts";
 import {Collidable} from "../engine/CollisionDetector.ts";
 
+export const ASTEROID_COLORS = {
+  RED: "#FF2102",
+  GREEN: "#12F31B",
+  BLUE: "#48AFF9",
+  YELLOW: "#E8AD15",
+  PURPLE: "#CC02FF",
+  PINK: "#FF028B",
+  WHITE: "#FFFFFF",
+}
+
 const baseTextStyle = {
   fontFamily: "moby-monospace",
   fontSize: 14,
@@ -25,8 +35,9 @@ const generateAsteroidText = (word: string) => {
   };
 };
 
-interface AsteroidConstructorParameters extends Omit<GameObjectConstructorParameters, "pixiObject"> {
+export interface AsteroidConstructorParameters extends Omit<GameObjectConstructorParameters, "pixiObject"> {
   word: string;
+  color: string;
   onDestroyed?: (asteroid: Asteroid) => void;
 }
 
@@ -37,24 +48,20 @@ export class Asteroid extends GameObjectWithPhysics {
   exploding: boolean;
   private onDestroyed: ((asteroid: Asteroid) => void) | undefined;
   invunerable: boolean;
+  color: string;
 
   constructor(args: AsteroidConstructorParameters) {
-    const AsteroidTextStyles = {
-      white: new TextStyle({
-        ...baseTextStyle,
-        fill: "#FFFFFF",
-      }),
-      purple: new TextStyle({
-        ...baseTextStyle,
-        fill: "CC02FF",
-      }),
-    };
-
     const container = new Container();
     const word = args.word;
     const {nameText, asteroidText} = generateAsteroidText(word);
-    const spriteAsteroidRock = new Text(asteroidText, AsteroidTextStyles.purple);
-    const spriteCore = new Text(nameText, AsteroidTextStyles.white);
+    const spriteAsteroidRock = new Text(asteroidText, new TextStyle({
+      ...baseTextStyle,
+      fill: args.color,
+    }));
+    const spriteCore = new Text(nameText, new TextStyle({
+      ...baseTextStyle,
+      fill: "#FFFFFF",
+    }));
     container.addChild(spriteAsteroidRock);
     container.addChild(spriteCore);
     super({...args, pixiObject: container});
@@ -62,6 +69,7 @@ export class Asteroid extends GameObjectWithPhysics {
     this.asteroidCoreText = spriteCore;
     this.velocity = {x: -0.3, y: -0.25};
     this.word = word;
+    this.color = args.color;
     this.addCollidable({
       object: this,
       type: "asteroid",

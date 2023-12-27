@@ -1,8 +1,20 @@
 import World from './engine/World.ts'
 import { setupBackground } from './background.ts'
-import { Asteroid } from './game-objects/Asteroid.ts'
+import {Asteroid, ASTEROID_COLORS, AsteroidConstructorParameters} from "./game-objects/Asteroid.ts";
 import { Ship } from './game-objects/Ship.ts'
+import {incrementScore} from "../ui/score/score.ts";
 
+const generateAsteroid = (args: AsteroidConstructorParameters) => {
+  return new Asteroid({
+    ...args,
+    onDestroyed: (asteroid) => {
+      incrementScore();
+      if (args.onDestroyed) {
+        args.onDestroyed(asteroid);
+      }
+    }
+  });
+}
 
 export function setupGame(element: HTMLDivElement) {
   const world = new World({
@@ -21,31 +33,35 @@ export function setupGame(element: HTMLDivElement) {
 
   // Set up scene
   setupBackground(world);
-  new Asteroid({
+  generateAsteroid({
     world,
     word: " Portfolio ",
+    color: ASTEROID_COLORS.RED,
   })
 
-  new Asteroid({
+  generateAsteroid({
     world,
     word: " Email ",
+    color: ASTEROID_COLORS.GREEN,
     position: {
       x: 600,
       y: 200,
     }
   })
 
-  new Asteroid({
+  generateAsteroid({
     world,
     word: " Kevin O'Flaherty ",
+    color: ASTEROID_COLORS.BLUE,
     position: {
       x: 300,
       y: 300,
     },
     onDestroyed: (asteroid: Asteroid) => {
-      new Asteroid({
+      generateAsteroid({
         world,
         word: " Email2 ",
+        color: ASTEROID_COLORS.BLUE,
         position: {
           x: asteroid.pixiObject.x,
           y: asteroid.pixiObject.y,
