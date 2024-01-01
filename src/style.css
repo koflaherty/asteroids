@@ -17,6 +17,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+* {
+  box-sizing: border-box;
+}
+
 #gameView {
  position: fixed;
   left: 0;
@@ -69,4 +73,62 @@ h1 {
   position: absolute;
   top: 20px;
   right: 30px;
+}
+
+.bonuses {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 300px;
+  max-height: 50%;
+  overflow-y: scroll;
+}
+
+.bonus {
+  width: 100%;
+  background: rgba(31,22,46, 0.88);
+  padding: 10px;
+  display: flex;
+  border-radius: 8px;
+}
+
+.bonus:not(:last-child) {
+  margin-bottom: 5px;
+}
+
+.bonus__title {
+  font-size: 10px;
+  color: #8A57D3;
+}
+
+.bonus__icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #422C61;
+  margin-right: 8px;
+}
+
+.bonus__icon__svg {
+  width: 16px;
+  height: 16px;
+}
+
+.bonus__description {
+  font-size: 13px;
+  color: #E0DAE8;
+}
+
+.animate {
+  animation-duration: 0.5s;
+  animation-name: animate-appear;
+  animation-fill-mode: backwards;
+}
+
+@keyframes animate-appear {
+  0% { opacity: 0; transform: scaleY(0.85); }
+  100% { opacity: 1; transform: scaleY(1); }
 }

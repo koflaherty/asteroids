@@ -7,23 +7,26 @@ export const setupBonuses = (element: HTMLElement) => {
 }
 
 export const bonusFound = (bonus: Bonus) => {
-  const bonusElement = document.createElement("div");
-  bonusElement.innerHTML += bonusToHTML(bonus);
-  bonusContainer.appendChild(bonusElement);
-}
-
-const bonusToHTML = (bonus: Bonus) => {
-  return `<a href="${bonus.url}" target="_blank">
-    <div class="bonus">
-      <div class="bonus-icon">
-        <i class="fas fa-${bonus.icon}"></i>
+  const bonusLink = document.createElement("a");
+  bonusLink.href = bonus.url;
+  bonusLink.target = "_blank";
+  bonusLink.className = "bonus animate";
+  bonusLink.innerHTML = `
+    <div class="bonus__icon">
+      ${bonus.icon === "link" ?
+        '<img class="bonus__icon__svg" src="assets/link.svg" alt="link icon" />' :
+        '<img class="bonus__icon__svg" src="assets/mail.svg" alt="mail icon" />'
+      }
+    </div>
+    <div class="bonus__content">
+      <div class="bonus__title">
+        ${bonus.title}
       </div>
-      <div class="bonus-title">
-        <h3>${bonus.title}</h3>
-      </div>
-      <div class="bonus-description">
-        <p>${bonus.description}</p>
+      <div class="bonus__description">
+        ${bonus.description}
       </div>
     </div>
-  </a>`
+  `
+
+  bonusContainer.appendChild(bonusLink)
 }

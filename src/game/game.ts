@@ -92,4 +92,24 @@ export function setupGame(element: HTMLDivElement) {
   })
   world.follow(ship.pixiObject)
   ship.pixiObject.rotation = Math.PI / -2
+
+  setTimeout(() => {
+    bonusFound({
+      title: "TEST",
+      description: "www.example.com",
+      icon: "link",
+      url: "https://www.example.com",
+    })
+
+    setTimeout(() => {
+      bonusFound({
+        title: "Email",
+        description: "www.example.com",
+        icon: "email",
+        url: "https://www.example.com",
+      })
+    }, 500)
+  }, 500)
+
+
 }
