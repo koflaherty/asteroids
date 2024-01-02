@@ -6,24 +6,10 @@ import { incrementScore } from '../ui/score/score.ts'
 import { Bonus } from '../ui/bonuses/types.ts'
 import { bonusFound } from '../ui/bonuses/bonuses.ts'
 
-const generateAsteroid = (args: AsteroidConstructorParameters, bonus?: Bonus) => {
-  return new Asteroid({
-    ...args,
-    onDestroyed: (asteroid) => {
-      incrementScore()
-      if (args.onDestroyed) {
-        args.onDestroyed(asteroid)
-      }
-
-      if (bonus) {
-        bonusFound(bonus)
-      }
-    },
-  })
-}
+let world: World
 
 export function setupGame(element: HTMLDivElement) {
-  const world = new World({
+  world = new World({
     mountToElement: element,
     backgroundColor: '#160F21',
     size: {
@@ -31,14 +17,29 @@ export function setupGame(element: HTMLDivElement) {
       y: 3000,
     },
   })
-
-  // enable Tween
-
-  // activate plugins
-
-
-  // Set up scene
   setupBackground(world)
+
+  const ship = new Ship({
+    world,
+    maxVelocity: 2.5,
+    position: {
+      x: 800,
+      y: 900,
+    },
+    decay: 0.05,
+  })
+  world.follow(ship.pixiObject)
+  ship.pixiObject.rotation = Math.PI / -2
+
+  return world
+}
+
+export const startGame = () => {
+  if (!world) {
+    console.warn('World has not been initialized')
+    return
+  }
+
   generateAsteroid({
     world,
     word: ' Portfolio ',
@@ -54,15 +55,15 @@ export function setupGame(element: HTMLDivElement) {
       y: 200,
     },
   }, {
-    title: "EMAIL",
-    icon: "email",
-    description: "kevin@oflaherty.tech",
-    url: "mailto:kevin@oflaherty.tech",
+    title: 'EMAIL',
+    icon: 'email',
+    description: 'kevin@oflaherty.tech',
+    url: 'mailto:kevin@oflaherty.tech',
   })
 
   generateAsteroid({
     world,
-    word: " Kevin O'Flaherty ",
+    word: ' Kevin O\'Flaherty ',
     color: ASTEROID_COLORS.BLUE,
     position: {
       x: 300,
@@ -80,16 +81,20 @@ export function setupGame(element: HTMLDivElement) {
       })
     },
   })
+}
 
-  const ship = new Ship({
-    world,
-    maxVelocity: 2.5,
-    position: {
-      x: 800,
-      y: 900,
+const generateAsteroid = (args: AsteroidConstructorParameters, bonus?: Bonus) => {
+  return new Asteroid({
+    ...args,
+    onDestroyed: (asteroid) => {
+      incrementScore()
+      if (args.onDestroyed) {
+        args.onDestroyed(asteroid)
+      }
+
+      if (bonus) {
+        bonusFound(bonus)
+      }
     },
-    decay: 0.05,
   })
-  world.follow(ship.pixiObject)
-  ship.pixiObject.rotation = Math.PI / -2
 }
