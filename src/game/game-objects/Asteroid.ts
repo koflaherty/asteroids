@@ -67,7 +67,6 @@ export class Asteroid extends GameObjectWithPhysics {
     super({...args, pixiObject: container});
     this.asteroidRockText = spriteAsteroidRock;
     this.asteroidCoreText = spriteCore;
-    this.velocity = {x: -0.3, y: -0.25};
     this.word = word;
     this.color = args.color;
     this.addCollidable({

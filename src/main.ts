@@ -18,7 +18,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
     <div id="gui" class="overlay">
       <div class="score">Score: <span id="score">0</span></div>
       <div class="bonuses">
-        <div id="bonus-label" class="bonuses__label bonuses__label--hidden">Bonuses</div>
+        <div id="bonus-label" class="bonuses__label bonuses__label--hidden"></div>
         <div id="bonuses"></div>
       </div>
     </div>

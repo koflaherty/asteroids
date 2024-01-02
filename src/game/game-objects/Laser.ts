@@ -49,7 +49,6 @@ export class Laser extends GameObjectWithPhysics {
 
   onCollision(_collidable: Collidable, _boxes: CollisionBox[][]) {
     setTimeout(() => {
-      console.log('laser hit asteroid')
       this.destroy();
     }, 10);
 
