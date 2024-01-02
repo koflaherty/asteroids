@@ -2,7 +2,7 @@ import {Container, Rectangle, Text, TextStyle} from "pixi.js";
 import {BACKGROUND_COLOR} from "../background.ts";
 import {asteroidTextGeneration} from "../ascii-art/asteroidTextGeneration.ts";
 import {CollisionBox, GameObjectConstructorParameters} from "../engine/GameObject.ts";
-import {GameObjectWithPhysics} from "../engine/GameObjectWithPhysics.ts";
+import { GameObjectWithPhysics, GameObjectWithPhysicsParameters } from '../engine/GameObjectWithPhysics.ts'
 import {Collidable} from "../engine/CollisionDetector.ts";
 
 export const ASTEROID_COLORS = {
@@ -35,7 +35,7 @@ const generateAsteroidText = (word: string) => {
   };
 };
 
-export interface AsteroidConstructorParameters extends Omit<GameObjectConstructorParameters, "pixiObject"> {
+export interface AsteroidConstructorParameters extends Omit<GameObjectWithPhysicsParameters, "pixiObject"> {
   word: string;
   color: string;
   onDestroyed?: (asteroid: Asteroid) => void;
