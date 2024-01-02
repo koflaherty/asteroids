@@ -3,6 +3,13 @@ import { setupGame, startGame } from './game/game.ts'
 import { setupScore } from './ui/score/score.ts'
 import { setupBonuses } from './ui/bonuses/bonuses.ts'
 
+declare global {
+  interface Window {
+    onStart: () => void;
+  }
+}
+
+
 let hasStarted = false;
 window.onStart = () => {
   if (!hasStarted) {

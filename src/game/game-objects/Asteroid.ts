@@ -1,7 +1,7 @@
 import {Container, Rectangle, Text, TextStyle} from "pixi.js";
 import {BACKGROUND_COLOR} from "../background.ts";
 import {asteroidTextGeneration} from "../ascii-art/asteroidTextGeneration.ts";
-import {CollisionBox, GameObjectConstructorParameters} from "../engine/GameObject.ts";
+import {CollisionBox} from "../engine/GameObject.ts";
 import { GameObjectWithPhysics, GameObjectWithPhysicsParameters } from '../engine/GameObjectWithPhysics.ts'
 import {Collidable} from "../engine/CollisionDetector.ts";
 
