@@ -38,16 +38,16 @@ export class GameObject {
     const topEdge = this.pixiObject.y - (this.pixiObject.height * anchor.y)
 
     let horizontalBounds = 0
-    if (leftEdge < this.world.viewport.x) {
+    if (leftEdge < 0) {
       horizontalBounds = -1
-    } else if (leftEdge > this.world.viewport.x + this.world.viewport.worldWidth) {
+    } else if (leftEdge + this.pixiObject.width > this.world.viewport.worldWidth) {
       horizontalBounds = 1
     }
 
     let verticalBounds = 0
-    if (topEdge < this.world.viewport.y) {
+    if (topEdge < 0) {
       verticalBounds = -1
-    } else if (topEdge > this.world.viewport.y + this.world.viewport.worldHeight) {
+    } else if (topEdge + this.pixiObject.height > this.world.viewport.worldHeight) {
       verticalBounds = 1
     }
 
